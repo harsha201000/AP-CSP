@@ -1,0 +1,56 @@
+IMPORT library 'turtle'
+IMPORT library 'random'
+
+DEFINE function main()
+    SET screen = turtle.Screen()
+    CONFIGURE screen with width 500, height 400
+    SET screen title to "Turtle Race"
+    SET is_race_on to FALSE
+
+    # List of colors and starting y positions
+    SET colors = ["red", "blue", "green", "yellow", "purple", "orange"]
+    SET y_positions = [-100, -60, -20, 20, 60, 100]
+    SET all_turtles = an empty list
+
+    # Draw the finish line
+    CREATE turtle finish_line
+    LIFT finish_line pen
+    MOVE finish_line to coordinates (230, 200)
+    LOWER finish_line pen
+    SET finish_line color to "black"
+    TURN finish_line RIGHT by 90 degrees
+    MOVE finish_line FORWARD by 400 units
+    HIDE finish_line turtle graphic
+
+    # Create and position each turtle
+    FOR index FROM 0 TO 5
+        CREATE new_turtle with shape "turtle"
+        SET new_turtle color to colors[index]
+        LIFT new_turtle pen
+        MOVE new_turtle to coordinates (x=-230, y=y_positions[index])
+        ADD new_turtle to all_turtles list
+    END FOR
+
+    # Start the race
+    SET is_race_on to TRUE
+
+    WHILE is_race_on is TRUE
+        FOR EACH turtle IN all_turtles
+            # Check for winner
+            IF turtle's X coordinate >= 230 THEN
+                SET is_race_on to FALSE
+                SET winning_color to turtle's pen color
+                DISPLAY "The winner is the " + winning_color + " turtle!"
+            END IF
+
+            # Move turtle randomly forward
+            SET rand_distance to a random integer between 0 and 10
+            MOVE turtle FORWARD by rand_distance units
+        END FOR
+    END WHILE
+
+    # Keep the screen open
+    WAIT for screen click to exit
+END FUNCTION
+
+CALL main()
